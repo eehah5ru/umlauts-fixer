@@ -1,0 +1,3 @@
+module FixDuden.Internal
+    (
+    ) where
