@@ -6,6 +6,7 @@ import System.Hclip
 -- import qualified Data.ByteString.Char8 as C
 import Control.Monad
 import qualified Data.Char as C
+import System.Environment (getEnv)
 
 fixUmlauts :: Char -> Char
 fixUmlauts '\128' = 'Ä'
@@ -23,4 +24,19 @@ printByteCodes = foldM_ doPrint ()
 
 fixDudenEncoding :: IO ()
 fixDudenEncoding = modifyClipboard_ (map fixUmlauts)
+   
+-- fixDudenEncoding = do 
+--                       cl <- getClipboard >>= return . map fixUmlauts
+--                       lang <- getEnv "LANG"
+--                       setClipboard (cl ++ " - " ++ lang)
+  -- where f xs = (map fixUmlauts xs)
 -- main = getClipboard >>= return . map fixUmlauts >>= putStrLn
+
+
+printBytesFromClipBoard :: IO ()
+printBytesFromClipBoard = getClipboard >>= printByteCodes
+
+fixAndPrint :: IO ()
+fixAndPrint = getClipboard >>= return . map fixUmlauts >>= putStrLn
+
+
