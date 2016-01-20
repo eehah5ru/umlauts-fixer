@@ -4,13 +4,13 @@ Author:                 Nicola Spesivtsev <nicola.spesivcev@gmail.com>
 Maintainer:             Nicola Spesivtsev <nicola.spesivcev@gmail.com>
 License:                BSD3
 License-File:           LICENSE
--- Synopsis:               
--- Description:            
+-- Synopsis:
+-- Description:
 Cabal-Version:          >= 1.10
 Build-Type:             Simple
 Extra-Source-Files:     README.md, ChangeLog.md
 
-Executable fix_duden_encoding                        
+Executable fix_duden_encoding
   Default-Language:     Haskell2010
   HS-Source-Dirs:       src
   GHC-Options:          -Wall
@@ -22,6 +22,11 @@ Executable fix_duden_encoding
                       , mtl
                       , transformers
                       , bytestring
+                      , setlocale
+                      , parsec
+                      , parsers
+                      , parsec-utils
+
 
 Library
   Default-Language:     Haskell2010
@@ -36,6 +41,9 @@ Library
                       , transformers
                       , bytestring
                       , setlocale
+                      , parsec
+                      , parsers
+                      , parsec-utils
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
@@ -49,4 +57,4 @@ Test-Suite spec
 
 Source-Repository head
   Type:                 git
---  Location:             
+--  Location:

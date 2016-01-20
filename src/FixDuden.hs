@@ -6,7 +6,12 @@ import System.Hclip
 -- import qualified Data.ByteString.Char8 as C
 import Control.Monad
 import qualified Data.Char as C
-import System.Environment (getEnv)
+-- import System.Environment (getEnv)
+
+-- import Data.Either (either)
+
+
+import Cleaner
 
 fixUmlauts :: Char -> Char
 fixUmlauts '\128' = 'Ä'
@@ -15,7 +20,7 @@ fixUmlauts '\134' = 'Ü'
 fixUmlauts '\138' = 'ä'
 fixUmlauts '\154' = 'ö'
 fixUmlauts '\159' = 'ü'
-fixUmlauts '\167' = 'ß'           
+fixUmlauts '\167' = 'ß'
 fixUmlauts c = c
 
 printByteCodes :: String -> IO ()
@@ -23,9 +28,12 @@ printByteCodes = foldM_ doPrint ()
   where doPrint _ x = putStrLn $ (show . C.ord) x
 
 fixDudenEncoding :: IO ()
-fixDudenEncoding = modifyClipboard_ (map fixUmlauts)
-   
--- fixDudenEncoding = do 
+fixDudenEncoding = modifyClipboard_ (doFix)
+  where doFix = handleErrors . extractDefinition . map fixUmlauts
+        handleErrors = either (show) (id)
+
+
+-- fixDudenEncoding = do
 --                       cl <- getClipboard >>= return . map fixUmlauts
 --                       lang <- getEnv "LANG"
 --                       setClipboard (cl ++ " - " ++ lang)
@@ -37,6 +45,5 @@ printBytesFromClipBoard :: IO ()
 printBytesFromClipBoard = getClipboard >>= printByteCodes
 
 fixAndPrint :: IO ()
-fixAndPrint = getClipboard >>= return . map fixUmlauts >>= putStrLn
-
-
+fixAndPrint = getClipboard >>= return . map fixUmlauts >>= return . extractDefinition >>= handleErrors >>= putStrLn
+  where handleErrors = return . (either (show) (id))
